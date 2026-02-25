@@ -16,7 +16,8 @@ export const HomeScreen = () => {
         <MobileHeader title="Home" onBack={() => navigation.goBack()} />
         <HomeHeader />
         {/* normal flow: search bar beneath the header */}
-        <SearchBar /> <FoodCategories />
+        <SearchBar />
+        <FoodCategories />
         <View style={{ marginTop: 24 }}>
           <Text style={{ color: COLORS.text, fontSize: 24, textAlign: 'center' }}>
             Welcome to Santastic Bites!
