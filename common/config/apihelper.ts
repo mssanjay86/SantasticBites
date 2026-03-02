@@ -1,6 +1,6 @@
 
 
-let BASE_URL = "http://10.99.54.103:5150";
+let BASE_URL = 'http://10.115.169.103:5150';
 
 export const apiHelper = async (
   endpoint:string,

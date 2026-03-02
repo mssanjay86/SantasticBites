@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     top: 0,
-    left: 0,
+    left: -10,
     right: 0,
     flexDirection: 'row',
     alignItems: 'center',
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   backButton: {
-    padding: SPACING.sm,
+    //padding: SPACING.xs,
   },
   arrow: {
     fontSize: 24,
