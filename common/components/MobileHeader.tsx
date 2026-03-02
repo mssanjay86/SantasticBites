@@ -36,8 +36,10 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ title, onBack }) => {
         onPress={handleBack}
         android_ripple={{ color: 'rgba(0,0,0,0.1)', borderless: true }}
         style={styles.backButton}
-      >
-        <ArrowLeft color={COLORS.text} size={24} />
+      >{title !== 'Home' &&(
+ <ArrowLeft color={COLORS.text} size={24} />
+      )}
+       
       </Pressable>
       <Text numberOfLines={1} style={styles.title}>
         {title}

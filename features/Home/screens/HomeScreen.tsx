@@ -9,6 +9,25 @@ import { FoodCard } from '../components/FoodCard';import { SPACING } from '../..
 
 export const HomeScreen = () => {
   const navigation = useNavigation();
+
+  // data array for food cards
+  const foodItems = [
+    { id: 1, image: require('../../../common/images/welcome-image.png'), name: 'Spicy Noodles', price: 12.99 },
+    { id: 2, image: require('../../../common/images/welcome-image.png'), name: 'Veg Salad', price: 8.5 },
+    { id: 3, image: require('../../../common/images/welcome-image.png'), name: 'Chicken Curry', price: 15.0 },
+    { id: 4, image: require('../../../common/images/welcome-image.png'), name: 'Fruit Bowl', price: 6.25 },
+    { id: 5, image: require('../../../common/images/welcome-image.png'), name: 'Spicy Noodles', price: 12.99 },
+    { id: 6, image: require('../../../common/images/welcome-image.png'), name: 'Veg Salad', price: 8.5 },
+    { id: 7, image: require('../../../common/images/welcome-image.png'), name: 'Chicken Curry', price: 15.0 },
+    { id: 8, image: require('../../../common/images/welcome-image.png'), name: 'Fruit Bowl', price: 6.25 },
+  ];
+
+  // split into chunks of 4
+  const rows: Array<typeof foodItems> = [];
+  for (let i = 0; i < foodItems.length; i += 4) {
+    rows.push(foodItems.slice(i, i + 4));
+  }
+
   return (
     <GlobalLayout>
       {/* override centering for this screen */}
@@ -20,60 +39,27 @@ export const HomeScreen = () => {
         <FoodCategories />
         {/* sample food cards grid: each row scrollable */}
         <View style={{ marginTop: SPACING.md }}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingHorizontal: SPACING.md }}
-          >
-            <FoodCard
-              image={require('../../../common/images/welcome-image.png')}
-              name="Spicy Noodles"
-              price="12.99"
-            />
-            <FoodCard
-              image={require('../../../common/images/welcome-image.png')}
-              name="Veg Salad"
-              price="8.50"
-            />
-            <FoodCard
-              image={require('../../../common/images/welcome-image.png')}
-              name="Chicken Curry"
-              price="15.00"
-            />
-            <FoodCard
-              image={require('../../../common/images/welcome-image.png')}
-              name="Fruit Bowl"
-              price="6.25"
-            />
-          </ScrollView>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingHorizontal: SPACING.md, marginTop: SPACING.md }}
-          >
-            <FoodCard
-              image={require('../../../common/images/welcome-image.png')}
-              name="Spicy Noodles"
-              price="12.99"
-            />
-            <FoodCard
-              image={require('../../../common/images/welcome-image.png')}
-              name="Veg Salad"
-              price="8.50"
-            />
-            <FoodCard
-              image={require('../../../common/images/welcome-image.png')}
-              name="Chicken Curry"
-              price="15.00"
-            />
-            <FoodCard
-              image={require('../../../common/images/welcome-image.png')}
-              name="Fruit Bowl"
-              price="6.25"
-            />
-          </ScrollView>
+          {rows.map((row, rowIndex) => (
+            <ScrollView
+              horizontal
+              key={rowIndex}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: SPACING.md,
+                marginTop: rowIndex > 0 ? SPACING.md : 0,
+              }}
+            >
+              {row.map(item => (
+                <FoodCard
+                  key={item.id}
+                  image={item.image}
+                  name={item.name}
+                  price={item.price}
+                />
+              ))}
+            </ScrollView>
+          ))}
         </View>
-        
       </View>
     </GlobalLayout>
   );
