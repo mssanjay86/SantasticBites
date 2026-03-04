@@ -1,4 +1,4 @@
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { GlobalLayout } from '../../../common/components/GlobalLayout';
 import MobileHeader from '../../../common/components/MobileHeader';
 import HomeHeader from '../components/HomeHeader';
@@ -7,7 +7,7 @@ import { SearchBar } from '../components/SearchBar';
 import { FoodCategories } from '../components/FoodCategories';
 import { FoodCard } from '../components/FoodCard';import { SPACING } from '../../../common/styles/spacing';import { COLORS } from '../../../common/styles/colors';
 
-export const HomeScreen = () => {
+export const ConsumerHome = () => {
   const navigation = useNavigation();
 
   // data array for food cards
@@ -31,7 +31,7 @@ export const HomeScreen = () => {
   return (
     <GlobalLayout>
       {/* override centering for this screen */}
-      <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+      <View style={styles.container}>
         <MobileHeader title="Home" onBack={() => navigation.goBack()} />
         <HomeHeader />
         {/* normal flow: search bar beneath the header */}
@@ -64,3 +64,11 @@ export const HomeScreen = () => {
     </GlobalLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    paddingTop: 56,
+  },
+});

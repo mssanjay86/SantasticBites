@@ -21,6 +21,7 @@ interface MobileHeaderProps {
 
 const MobileHeader: React.FC<MobileHeaderProps> = ({ title, onBack }) => {
   const navigation = useNavigation<NavigationProp<Record<string, object | undefined>>>();
+  const showBack = title !== 'Home';
 
   const handleBack = (e: GestureResponderEvent) => {
     if (onBack) {
@@ -32,20 +33,18 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ title, onBack }) => {
 
   return (
     <View style={styles.container}>
-      <Pressable
-        onPress={handleBack}
-        android_ripple={{ color: 'rgba(0,0,0,0.1)', borderless: true }}
-        style={styles.backButton}
-      >{title !== 'Home' &&(
- <ArrowLeft color={COLORS.text} size={24} />
+      {showBack && (
+        <Pressable
+          onPress={handleBack}
+          android_ripple={{ color: 'rgba(0,0,0,0.1)', borderless: true }}
+          style={styles.backButton}
+        >
+          <ArrowLeft color={COLORS.text} size={24} />
+        </Pressable>
       )}
-       
-      </Pressable>
-      <Text numberOfLines={1} style={styles.title}>
+      <Text numberOfLines={1} style={[styles.title, showBack && styles.titleWithBack]}>
         {title}
       </Text>
-      {/* spacer so title stays centered */}
-      <View style={styles.spacer} />
     </View>
   );
 };
@@ -56,15 +55,12 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     top: 0,
-    left: -10,
+    left: 0,
     right: 0,
     flexDirection: 'row',
     alignItems: 'center',
     height: 56,
     paddingHorizontal: SPACING.lg,
-    //backgroundColor: '#0B1020', // match GlobalLayout background
-    borderBottomWidth: 0,
-    //borderBottomColor: '#ccc',
     zIndex: 1000,
   },
   backButton: {
@@ -80,9 +76,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     color: COLORS.text,
-    marginLeft: 8,
   },
-  spacer: {
-    width: 32, // same width as back button to center title
+  titleWithBack: {
+    marginLeft: 8,
   },
 });

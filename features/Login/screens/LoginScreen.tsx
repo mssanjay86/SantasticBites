@@ -7,7 +7,7 @@ import {
   Pressable,
   Animated,
   Keyboard,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { GlobalLayout } from '../../../common/components/GlobalLayout';
 import { SPACING } from '../../../common/styles/spacing';
@@ -15,7 +15,7 @@ import { COLORS } from '../../../common/styles/colors';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../Navigation/types';
 import apiHelper from '../../../common/config/apihelper';
-import Toast  from '../../../common/components/Toast';
+import Toast from '../../../common/components/Toast';
 
 export const LoginScreen = () => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -46,103 +46,122 @@ export const LoginScreen = () => {
 
   const login = async () => {
     Keyboard.dismiss();
-    let res= await apiHelper(`/Auth/api/login?mobile=${credentials.mobile}&password=${credentials.password}`,'GET')
+    let res = await apiHelper(
+      `/Auth/api/login?mobile=${credentials.mobile}&password=${credentials.password}`,
+      'GET',
+    );
     console.log('Login response:', res);
-  setShowToast(true);
-      setShowToastMessage(res.message);
-    if(res.isSuccess){
-    
-      setTimeout(() => {
-        navigation.navigate('Home');
-      }, 1000);
-
+    setShowToast(true);
+    setShowToastMessage(res.message);
+    if (res.isSuccess) {
+      if (res.userType.toLowerCase() === 'consumer') {
+        setTimeout(() => {
+          navigation.navigate('ConsumerHome');
+        }, 500);
+      } else if (res.userType.toLowerCase() === 'provider') {
+        setTimeout(() => {
+          navigation.navigate('ProviderHome');
+        }, 500);
+      }else{
+        setShowToastMessage('Unknown user type');
+      }
     }
   };
 
   return (
     <GlobalLayout>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Animated.View
-        style={[
-          styles.card,
-          {
-            opacity: fadeAnim,
-            transform: [{ translateY: translateAnim }],
-          },
-        ]}
-      >
-        <Text style={styles.title}>Welcome Back 👋</Text>
-        <Text style={styles.subtitle}>
-          Login to continue enjoying delicious food
-        </Text>
-
-        {/* Username */}
-        <View style={styles.inputWrapper}>
-          <Text style={styles.label}>Mobile Number</Text>
-          <TextInput
-            placeholder="Enter your mobile number"
-            placeholderTextColor={COLORS.textSecondary}
-            style={styles.input}
-            autoCapitalize="none"
-            keyboardType="phone-pad"
-            value={credentials.mobile}
-            onChangeText={text => {
-              //console.log('Mobile number changed:', text);
-              setCredentials(prev => ({ ...prev, mobile: text }));
-            }}
-          />
-        </View>
-
-        {/* Password */}
-        <View style={styles.inputWrapper}>
-          <Text style={styles.label}>Password</Text>
-          <View style={styles.passwordWrapper}>
-          <TextInput
-            placeholder="Enter your password"
-            placeholderTextColor={COLORS.textSecondary}
-            style={[styles.input, styles.passwordInput]}
-            value={credentials.password}
-            onChangeText={text => {
-              setCredentials(prev => ({ ...prev, password: text }));
-            }}
-            secureTextEntry={!showPassword}
-          />
-          <Pressable
-            onPress={() => setShowPassword(prev => !prev)}
-            style={styles.eyeButton}
-            android_ripple={{ color: 'rgba(255,255,255,0.1)', borderless: true }}
-          >
-            <Text style={styles.eye}>{showPassword ? '🙈' : '👁️'}</Text>
-          </Pressable>
-        </View>
-        </View>
-
-        {/* Submit */}
-        <Pressable
-          style={({ pressed }) => [credentials.mobile && credentials.password ? styles.button : { ...styles.button, opacity: 0.6 }, 
-            styles.button,
-            pressed && styles.buttonPressed,
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <Animated.View
+          style={[
+            styles.card,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: translateAnim }],
+            },
           ]}
-          disabled={!credentials.mobile || !credentials.password}
-          android_ripple={{ color: 'rgba(255,255,255,0.15)' }}
-          onPress={login}
         >
-          <Text style={styles.buttonText}>Login</Text>
-        </Pressable>
-
-        <Text style={styles.footerText}>
-          Don’t have an account?{' '}
-          <Text
-            style={styles.link}
-            onPress={() => navigation.navigate('Register')}
-          >
-            Sign up
+          <Text style={styles.title}>Welcome Back 👋</Text>
+          <Text style={styles.subtitle}>
+            Login to continue enjoying delicious food
           </Text>
-        </Text>
-      </Animated.View>
+
+          {/* Username */}
+          <View style={styles.inputWrapper}>
+            <Text style={styles.label}>Mobile Number</Text>
+            <TextInput
+              placeholder="Enter your mobile number"
+              placeholderTextColor={COLORS.textSecondary}
+              style={styles.input}
+              autoCapitalize="none"
+              keyboardType="phone-pad"
+              value={credentials.mobile}
+              onChangeText={text => {
+                //console.log('Mobile number changed:', text);
+                setCredentials(prev => ({ ...prev, mobile: text }));
+              }}
+            />
+          </View>
+
+          {/* Password */}
+          <View style={styles.inputWrapper}>
+            <Text style={styles.label}>Password</Text>
+            <View style={styles.passwordWrapper}>
+              <TextInput
+                placeholder="Enter your password"
+                placeholderTextColor={COLORS.textSecondary}
+                style={[styles.input, styles.passwordInput]}
+                value={credentials.password}
+                onChangeText={text => {
+                  setCredentials(prev => ({ ...prev, password: text }));
+                }}
+                secureTextEntry={!showPassword}
+              />
+              <Pressable
+                onPress={() => setShowPassword(prev => !prev)}
+                style={styles.eyeButton}
+                android_ripple={{
+                  color: 'rgba(255,255,255,0.1)',
+                  borderless: true,
+                }}
+              >
+                <Text style={styles.eye}>{showPassword ? '🙈' : '👁️'}</Text>
+              </Pressable>
+            </View>
+          </View>
+
+          {/* Submit */}
+          <Pressable
+            style={({ pressed }) => [
+              credentials.mobile && credentials.password
+                ? styles.button
+                : { ...styles.button, opacity: 0.6 },
+              styles.button,
+              pressed && styles.buttonPressed,
+            ]}
+            disabled={!credentials.mobile || !credentials.password}
+            android_ripple={{ color: 'rgba(255,255,255,0.15)' }}
+            onPress={login}
+          >
+            <Text style={styles.buttonText}>Login</Text>
+          </Pressable>
+
+          <Text style={styles.footerText}>
+            Don’t have an account?{' '}
+            <Text
+              style={styles.link}
+              onPress={() => navigation.navigate('Register')}
+            >
+              Sign up
+            </Text>
+          </Text>
+        </Animated.View>
       </TouchableWithoutFeedback>
-      {showToast &&(
-        <Toast message={showToastMessage} visible={showToast} onHide={() => setShowToast(false)} />
+      {showToast && (
+        <Toast
+          message={showToastMessage}
+          visible={showToast}
+          onHide={() => setShowToast(false)}
+        />
       )}
     </GlobalLayout>
   );
@@ -192,7 +211,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.border,
     fontFamily: 'Inter-Regular',
-  },  passwordWrapper: {
+  },
+  passwordWrapper: {
     position: 'relative',
   },
   passwordInput: {
@@ -221,7 +241,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.35,
     shadowRadius: 20,
     elevation: 8,
-  },  buttonPressed: {
+  },
+  buttonPressed: {
     opacity: 0.9,
     transform: [{ scale: 0.98 }],
   },

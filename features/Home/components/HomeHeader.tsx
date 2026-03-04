@@ -32,8 +32,6 @@ export default HomeHeader;
 
 const styles = StyleSheet.create({
   container: {
-    // placed beneath MobileHeader via margin
-    marginTop: 56, // height of MobileHeader
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
